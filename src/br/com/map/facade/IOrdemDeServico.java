@@ -6,12 +6,16 @@ public interface IOrdemDeServico {
   
   public void setTitulo(String titulo);
   
+  public Boolean getAberta();
+  
   public void setAberta(boolean aberta);
   
   public String getDescricao();
   
   public void setDescricao(String descricao);
   
-  public Boolean getAberta();
-
+  public String getCpf();
+  
+  public void setCpf(String cpf);
+  
 }

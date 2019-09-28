@@ -17,8 +17,8 @@ public class SimpleFactory {
     return new Facada();
   }
   
-  public static IOrdemDeServico ordemDeServico(String titulo, String descricao) {
-    return new OrdemDeServico(titulo, descricao);
+  public static IOrdemDeServico ordemDeServico(String titulo, String descricao, String cpf) {
+    return new OrdemDeServico(titulo, descricao, cpf);
   }
   
   public static IUsuario usuario(String nome, String cpf) {

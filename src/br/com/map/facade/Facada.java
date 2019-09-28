@@ -2,15 +2,20 @@ package br.com.map.facade;
 
 import br.com.map.OrdemDeServico;
 import br.com.map.Usuario;
+import br.com.map.dao.OrdemDeServicoDao;
+import br.com.map.dao.UsuarioDao;
 import br.com.map.simplefactory.SimpleFactory;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Facada implements IFacade {
-  private HashMap<String, IUsuario> usuarios;
-
+  
+  UsuarioDao bancoUsuario = new UsuarioDao();
+  OrdemDeServicoDao bancoOrdem = new OrdemDeServicoDao();
+  
   public Facada() {
-    this.usuarios = new HashMap<String, IUsuario>();
+    
   }
 
   /**
@@ -18,16 +23,25 @@ public class Facada implements IFacade {
    */
   public void inserirUsuario(String nome, String cpf) {
     IUsuario usuario = SimpleFactory.usuario(nome, cpf);
-    this.usuarios.put(cpf, usuario);
+    try {
+      this.bancoUsuario.inserirUsuario(usuario);
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   /**
    * metodo responsavel por inserir um nova ordem.
    */
   public boolean inserirOs(String titulo, String descricao, String cpf) {
-    IOrdemDeServico ordemDeServico = SimpleFactory.ordemDeServico(titulo, descricao);
-    if (this.usuarios.get(cpf).addOs(ordemDeServico)) {
+    IOrdemDeServico ordemDeServico = SimpleFactory.ordemDeServico(titulo, descricao, cpf);
+    try {
+      this.bancoOrdem.inserirOrdem(ordemDeServico);
       return true;
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
     return false;
   }
@@ -36,9 +50,12 @@ public class Facada implements IFacade {
    * Metodo responsavel por excluir usuario.
    */
   public boolean deletarUsuario(String cpf) {
-    if (this.usuarios.get(cpf) != null) {
-      this.usuarios.remove(cpf);
+    try {
+      this.bancoUsuario.excluirUser(cpf);
       return true;
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
     return false;
   }
@@ -47,8 +64,12 @@ public class Facada implements IFacade {
    * metodo para deletar uma ordem de serviço.
    */
   public boolean deletarOs(String cpf, String titulo) {
-    if (this.usuarios.get(cpf).removerOs(titulo)) {
+    try {
+      this.bancoOrdem.excluirOrdem(cpf, titulo);
       return true;
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
     return false;
   }
@@ -57,8 +78,12 @@ public class Facada implements IFacade {
    * metodo para resolver uma OS.
    */
   public boolean resolverOs(String cpf, String titulo) {
-    if (this.usuarios.get(cpf).resolverOs(titulo)) {
+    try {
+      this.bancoOrdem.editarStatus(cpf, titulo);
       return true;
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
     return false;
   }

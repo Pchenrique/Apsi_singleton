@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 27-Set-2019 às 14:25
--- Versão do servidor: 10.1.38-MariaDB
--- versão do PHP: 7.3.4
+-- Tempo de geração: 28-Set-2019 às 02:31
+-- Versão do servidor: 10.4.6-MariaDB
+-- versão do PHP: 7.3.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `apsi`
+-- Banco de dados: `apsi`
 --
 
 -- --------------------------------------------------------
@@ -29,11 +29,19 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `ordem_servico` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `titulo` varchar(60) NOT NULL,
-  `descricao` varchar(100) NOT NULL,
-  `id_usuario` int(11) NOT NULL
+  `descricao` varchar(200) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `cpf_usuario` varchar(14) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `ordem_servico`
+--
+
+INSERT INTO `ordem_servico` (`id`, `titulo`, `descricao`, `status`, `cpf_usuario`) VALUES
+(4, 'ti', 'teste', 0, '123');
 
 -- --------------------------------------------------------
 
@@ -42,53 +50,53 @@ CREATE TABLE `ordem_servico` (
 --
 
 CREATE TABLE `usuarios` (
-  `id` int(10) NOT NULL,
-  `nome` varchar(60) NOT NULL,
-  `cpf` varchar(14) NOT NULL
+  `cpf` varchar(14) NOT NULL,
+  `nome` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Indexes for dumped tables
+-- Extraindo dados da tabela `usuarios`
+--
+
+INSERT INTO `usuarios` (`cpf`, `nome`) VALUES
+('123', 'paulo');
+
+--
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `ordem_servico`
+-- Índices para tabela `ordem_servico`
 --
 ALTER TABLE `ordem_servico`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_usuario` (`id_usuario`);
+  ADD KEY `fk_cpf` (`cpf_usuario`);
 
 --
--- Indexes for table `usuarios`
+-- Índices para tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`cpf`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `ordem_servico`
+-- AUTO_INCREMENT de tabela `ordem_servico`
 --
 ALTER TABLE `ordem_servico`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
+-- Restrições para despejos de tabelas
 --
 
 --
 -- Limitadores para a tabela `ordem_servico`
 --
 ALTER TABLE `ordem_servico`
-  ADD CONSTRAINT `ordem_servico_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+  ADD CONSTRAINT `fk_cpf` FOREIGN KEY (`cpf_usuario`) REFERENCES `usuarios` (`cpf`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
